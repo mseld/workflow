@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+    STAGE:
+        Description: "Stage name"
+        Type: "String"
+Description: >-
+  triggred by putting records into kineses DLR stream, it used to update the SMS
+  status in SMS dynamo table
+Resources:
+  DLRUpdateSmsStatus:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: sms-gw-dlr_stream_update_sms_status
+      Description: >-
+        triggred by putting records into kineses DLR stream, it used to update
+        the SMS status in SMS dynamo table
+      Handler: index.handler
+      Runtime: nodejs4.3
+      CodeUri: .
+      Policies: 
+        - AWSLambdaKinesisExecutionRole
+        - AWSLambdaBasicExecutionRole
+      MemorySize: 128
+      Timeout: 100      
+      Environment:
+        Variables:
+          STAGE: !Ref STAGE
+      Events:
+        Stream:
+          Type: Kinesis
+          Properties:
+            Stream: arn:aws:kinesis:us-east-1:669791164395:stream/sms_dlrs
+            StartingPosition: TRIM_HORIZON
+            BatchSize: 100
+                

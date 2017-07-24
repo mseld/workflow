@@ -1,0 +1,30 @@
+version: 0.2
+
+env:
+  variables:
+    TEMPLATE: "template.yaml"
+    S3_BUCKET: ""
+
+phases:
+  install:
+    commands:
+      - echo Installing dependencies - `pwd`
+      - npm install
+      - echo dependencies install completed `date`
+  pre_build:
+    commands:      
+      - echo Nothing to do in the pre_build phase...
+  build:
+    commands:
+      - echo Build started on `date` in `pwd`
+      - aws cloudformation package --template $TEMPLATE --s3-bucket $S3_BUCKET --output-template template-output.yaml
+  post_build:
+    commands:
+      - echo Build completed on `date`
+
+artifacts:
+  type: zip
+  files:
+    - template-output.yaml
+    - beta.json
+  discard-paths: yes

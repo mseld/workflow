@@ -1,0 +1,21 @@
+{
+    "name": "workflow-send-sms",
+    "version": "1.0.0",
+    "description": "",
+    "main": "test/index.js",
+    "dependencies": {
+        "aws-sdk": "^2.87.0",
+        "bluebird": "^3.5.0",
+        "uuid": "^3.1.0"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/sms-gw-lambda-dlr_update_sms_status"
+    },
+    "author": "",
+    "license": "ISC"
+}

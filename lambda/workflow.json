@@ -1,0 +1,40 @@
+{
+    "Comment": "An example of the Amazon States Language using a choice state.",
+    "StartAt": "send_sms",
+    "States": {
+        "send_sms": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:REGION:ACCOUNT_ID:function:FUNCTION_NAME",
+            "Next": "wait_seconds"
+        },
+        "wait_seconds": {
+            "Type": "Wait",
+            "Seconds": 10,
+            "Next": "check_db"
+        },
+        "check_db": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:REGION:ACCOUNT_ID:function:FUNCTION_NAME",
+            "Next": "catch_failure"
+        },
+        "catch_failure": {
+            "Type": "Choice",
+            "Choices": [{
+                "Variable": "$.status",
+                "NumericEquals": 0,
+                "Next": "send_voice_call"
+            }],
+            "Default": "DefaultState"
+        },
+        "send_voice_call": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:REGION:ACCOUNT_ID:function:OnSecondMatch",
+            "End": true
+        },
+        "DefaultState": {
+            "Type": "Pass",
+            "Result": "This is a fallback from a reserved error code",
+            "End": true
+        }
+    }
+}
